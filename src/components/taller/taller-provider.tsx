@@ -34,6 +34,11 @@ interface RespuestaPresupuesto {
   ip: string
 }
 
+interface AutorizacionEstimado {
+  autorizado_at: string
+  ip: string
+}
+
 interface TallerContextValue {
   ordenes: OrdenDetalle[]
   logs: LogAuditoria[]
@@ -46,6 +51,7 @@ interface TallerContextValue {
     decision: 'aprobado' | 'rechazado',
     ip: string,
   ) => RespuestaPresupuesto
+  autorizarEstimado: (ordenId: string, ip: string) => AutorizacionEstimado
   crearIngreso: (datos: NuevoIngreso) => string
 }
 
@@ -194,6 +200,50 @@ export function TallerProvider({ children }: { children: ReactNode }) {
     [],
   )
 
+  const autorizarEstimado = useCallback((ordenId: string, ip: string) => {
+    const now = new Date().toISOString()
+    const logId = nuevoId('log')
+    setState((prev) => {
+      const orden = prev.ordenes.find((o) => o.id === ordenId)
+      if (!orden) return prev
+      const tienePendientes = orden.adicionales.some((a) => a.estado === 'pendiente')
+      const estadoNuevo: EstadoOrden = tienePendientes || orden.estado === 'esperando_aprobacion' ? 'en_reparacion' : orden.estado
+      return {
+        ...prev,
+        ordenes: prev.ordenes.map((o) =>
+          o.id === ordenId
+            ? {
+                ...o,
+                estado: estadoNuevo,
+                updated_at: now,
+                adicionales: o.adicionales.map((a) =>
+                  a.estado === 'pendiente'
+                    ? { ...a, estado: 'aprobado', respondido_at: now, ip_cliente: ip }
+                    : a,
+                ),
+              }
+            : o,
+        ),
+        logs: [
+          ...prev.logs,
+          {
+            id: logId,
+            orden_id: ordenId,
+            tipo: 'aprobacion',
+            actor: 'admin',
+            descripcion: 'Estimado autorizado por la administración',
+            estado_anterior: orden.estado,
+            estado_nuevo: estadoNuevo,
+            ip,
+            created_at: now,
+          },
+        ],
+      }
+    })
+    setNotificacion('Estimado autorizado correctamente')
+    return { autorizado_at: now, ip }
+  }, [])
+
   const crearIngreso = useCallback((datos: NuevoIngreso) => {
     const now = new Date().toISOString()
     const clienteId = nuevoId('cli')
@@ -262,6 +312,7 @@ export function TallerProvider({ children }: { children: ReactNode }) {
       cambiarEstado,
       agregarAdicional,
       responderPresupuesto,
+      autorizarEstimado,
       crearIngreso,
     }),
     [
@@ -272,6 +323,7 @@ export function TallerProvider({ children }: { children: ReactNode }) {
       cambiarEstado,
       agregarAdicional,
       responderPresupuesto,
+      autorizarEstimado,
       crearIngreso,
     ],
   )
