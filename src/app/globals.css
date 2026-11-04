@@ -1,0 +1,124 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-status-review: var(--status-review);
+  --color-status-review-foreground: var(--status-review-foreground);
+  --color-status-approval: var(--status-approval);
+  --color-status-approval-foreground: var(--status-approval-foreground);
+  --color-status-repair: var(--status-repair);
+  --color-status-repair-foreground: var(--status-repair-foreground);
+  --color-status-ready: var(--status-ready);
+  --color-status-ready-foreground: var(--status-ready-foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root,
+.dark {
+  color-scheme: dark;
+
+  --status-review: #9c8e85;
+  --status-review-foreground: #1a1512;
+  --status-approval: #e5a93c;
+  --status-approval-foreground: #1a1512;
+  --status-repair: #cc2229;
+  --status-repair-foreground: #f5f0eb;
+  --status-ready: #2ecc71;
+  --status-ready-foreground: #1a1512;
+
+  --background: #1a1512;
+  --foreground: #f5f0eb;
+  --card: #261f1a;
+  --card-foreground: #f5f0eb;
+  --popover: #261f1a;
+  --popover-foreground: #f5f0eb;
+  --primary: #cc2229;
+  --primary-foreground: #f5f0eb;
+  --secondary: #3a2f28;
+  --secondary-foreground: #f5f0eb;
+  --muted: #322821;
+  --muted-foreground: #9c8e85;
+  --accent: #e5a93c;
+  --accent-foreground: #1a1512;
+  --destructive: #cc2229;
+  --border: #4a3f35;
+  --input: #4a3f35;
+  --ring: #e5a93c;
+  --chart-1: #cc2229;
+  --chart-2: #e5a93c;
+  --chart-3: #2ecc71;
+  --chart-4: #9c8e85;
+  --chart-5: #f5f0eb;
+  --radius: 0.25rem;
+  --sidebar: #261f1a;
+  --sidebar-foreground: #f5f0eb;
+  --sidebar-primary: #cc2229;
+  --sidebar-primary-foreground: #f5f0eb;
+  --sidebar-accent: #3a2f28;
+  --sidebar-accent-foreground: #f5f0eb;
+  --sidebar-border: #4a3f35;
+  --sidebar-ring: #e5a93c;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(circle at 50% -10%, rgb(204 34 41 / 16%), transparent 38rem),
+      linear-gradient(rgb(74 63 53 / 10%) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(74 63 53 / 10%) 1px, transparent 1px);
+    background-size: auto, 32px 32px, 32px 32px;
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: var(--status-approval);
+    color: var(--status-approval-foreground);
+  }
+}
